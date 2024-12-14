@@ -15,7 +15,8 @@ import {
   User,
   LogOut,
   ChevronDown,
-  Gift
+  Gift,
+  Coins
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -53,7 +54,7 @@ const SmartContractDashboard: React.FC = () => {
     ]);
     const [newMessage, setNewMessage] = useState<string>('');
     const [tokensClaimed, setTokensClaimed] = useState(false);
-
+    const [ccBalance, setCcBalance] = useState(0);
     // Previous functions remain the same...
 
     const handleClaimTokens = () => {
@@ -122,6 +123,7 @@ const SmartContractDashboard: React.FC = () => {
           }
         ]);
         setNewMessage('');
+        setCcBalance(prev => prev + 1); 
       }
     };
 
@@ -133,13 +135,14 @@ const SmartContractDashboard: React.FC = () => {
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
         handleSendMessage();
+        
       }
     };
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-gray-100">
         {/* Navigation */}
-         <motion.nav 
+        <motion.nav 
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -165,6 +168,12 @@ const SmartContractDashboard: React.FC = () => {
                 </motion.button>
               ) : (
                 <div className="flex items-center space-x-4">
+                  {/* CC Balance Display */}
+                  <div className="flex items-center px-4 py-2 bg-gray-700 rounded-lg">
+                    <Coins className="w-5 h-5 text-yellow-400 mr-2" />
+                    <span className="font-medium">{ccBalance} CC</span>
+                  </div>
+
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -176,6 +185,7 @@ const SmartContractDashboard: React.FC = () => {
                     <ChevronDown className="w-4 h-4" />
                   </motion.button>
 
+                  {/* Rest of the profile dropdown remains the same... */}
                   {showProfileDropdown && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
@@ -197,7 +207,7 @@ const SmartContractDashboard: React.FC = () => {
                         <Gift className="mr-2 w-5 h-5 text-green-400" />
                         <div>
                           <div className="font-medium">Claim CC Tokens</div>
-                          <div className="text-sm text-gray-400">60M CC tokens available</div>
+                          <div className="text-sm text-gray-400">{ccBalance} CC tokens available</div>
                         </div>
                       </button>
 
