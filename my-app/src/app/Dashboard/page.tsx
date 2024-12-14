@@ -13,7 +13,9 @@ import {
   X, 
   Plus,
   User,
-  LogOut
+  LogOut,
+  ChevronDown,
+  Gift
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -50,6 +52,15 @@ const SmartContractDashboard: React.FC = () => {
       { id: 2, sender: 'User', message: 'Can you help me understand how to create a basic voting contract?' }
     ]);
     const [newMessage, setNewMessage] = useState<string>('');
+    const [tokensClaimed, setTokensClaimed] = useState(false);
+
+    // Previous functions remain the same...
+
+    const handleClaimTokens = () => {
+      setTokensClaimed(true);
+      alert('Successfully claimed 60M CC tokens!');
+      setShowProfileDropdown(false);
+    };
 
     const connectWallet = async () => {
       if (typeof window.ethereum !== 'undefined') {
@@ -128,7 +139,7 @@ const SmartContractDashboard: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-gray-100">
         {/* Navigation */}
-        <motion.nav 
+         <motion.nav 
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -141,7 +152,7 @@ const SmartContractDashboard: React.FC = () => {
                 ContractCraft
               </Link>
             </div>
-            <div className="flex items-center space-x-4 relative">
+            <div className="flex items-center space-x-4">
               {!walletConnected ? (
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -153,7 +164,7 @@ const SmartContractDashboard: React.FC = () => {
                   Connect Metamask
                 </motion.button>
               ) : (
-                <div className="relative">
+                <div className="flex items-center space-x-4">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -161,18 +172,38 @@ const SmartContractDashboard: React.FC = () => {
                     onClick={() => setShowProfileDropdown(!showProfileDropdown)}
                   >
                     <User className="mr-2 w-5 h-5" />
-                    {walletAddress.substring(0, 6)}...{walletAddress.substring(38)}
+                    <span className="mr-2">Profile</span>
+                    <ChevronDown className="w-4 h-4" />
                   </motion.button>
-                  
+
                   {showProfileDropdown && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="absolute right-0 top-full mt-2 w-48 bg-gray-700 rounded-lg shadow-lg border border-gray-600"
+                      className="absolute right-4 top-16 w-64 bg-gray-700 rounded-lg shadow-lg border border-gray-600 overflow-hidden"
                     >
+                      <div className="p-4 border-b border-gray-600">
+                        <div className="text-sm text-gray-300 mb-2">Connected Wallet</div>
+                        <div className="text-sm font-mono">{walletAddress.substring(0, 6)}...{walletAddress.substring(38)}</div>
+                      </div>
+                      
+                      <button 
+                        onClick={handleClaimTokens}
+                        disabled={tokensClaimed}
+                        className={`w-full flex items-center p-4 hover:bg-gray-600 transition text-left ${
+                          tokensClaimed ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
+                      >
+                        <Gift className="mr-2 w-5 h-5 text-green-400" />
+                        <div>
+                          <div className="font-medium">Claim CC Tokens</div>
+                          <div className="text-sm text-gray-400">60M CC tokens available</div>
+                        </div>
+                      </button>
+
                       <button 
                         onClick={handleWithdraw}
-                        className="w-full flex items-center p-3 hover:bg-gray-600 transition text-left"
+                        className="w-full flex items-center p-4 hover:bg-gray-600 transition text-left"
                       >
                         <LogOut className="mr-2 w-5 h-5 text-red-400" />
                         Withdraw
@@ -184,6 +215,8 @@ const SmartContractDashboard: React.FC = () => {
             </div>
           </div>
         </motion.nav>
+
+
 
         {/* Main Dashboard Content */}
         <div className="pt-20 flex">
