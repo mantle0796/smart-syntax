@@ -5,6 +5,12 @@ import os
 
 app = Flask(__name__)
 CORS(app)
+
+# Root route
+@app.route('/')
+def home():
+    return "Welcome to the Flask API!"
+
 # Handling GET request
 @app.route('/get_example', methods=['GET'])
 def get_example():
@@ -29,13 +35,9 @@ def gen_chat():
         prompt = data.get('prompt', 'Guest')
         bible_ans = stream_chat_response(prompt)
         return jsonify(ans=f"{bible_ans}")
-        # Using Response with a generator to stream data
-        # return Response(stream_chat_response(prompt), content_type='text/event-stream')
     else:
         return jsonify(error="No data received"), 400
 
 if __name__ == '__main__':
-    # app.run(debug=True,port=)
     port = int(os.getenv("PORT", 8000))  # Default to 8000 if PORT is not set or falsy
-    app.run(debug=True, port=port)
-
+    app.run(debug=True, host='0.0.0.0', port=port)
