@@ -143,7 +143,7 @@ const SmartContractDashboard: React.FC = () => {
   const handleSendMessage = async (message?: string) => {
     const messageToSend = message || newMessage;
     try {
-      const response = await fetch('https://upgraded-funicular-7v59gggjgrr7hrxq4-8000.app.github.dev/chat_gen', {
+      const response = await fetch('https://smart-syntax.onrender.com/chat_gen', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
