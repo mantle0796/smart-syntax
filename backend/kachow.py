@@ -7,7 +7,7 @@ prompt = input()
 # Prepare the curl command
 curl_command = [
     "curl",
-    "-X", "POST", "https://llama.us.gaianet.network/v1/chat/completions",
+    "-X", "POST", "https://llama.gaia.domains/v1/chat/completions",
     "-H", "accept: application/json",
     "-H", "Content-Type: application/json",
     "-d", json.dumps({
